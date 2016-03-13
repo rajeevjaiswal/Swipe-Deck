@@ -39,12 +39,7 @@ public class SwipeDeckActivity extends AppCompatActivity {
         cardStack.setHardwareAccelerationEnabled(true);
 
         testData = new ArrayList<>();
-        testData.add("0");
-        testData.add("1");
-        testData.add("2");
-        testData.add("3");
-        testData.add("4");
-
+        getData();
         adapter = new SwipeDeckAdapter(testData, this);
         cardStack.setAdapter(adapter);
 
@@ -60,8 +55,15 @@ public class SwipeDeckActivity extends AppCompatActivity {
             }
 
             @Override
+            public void cardSwipedUp(int position) {
+                Log.i("MainActivity", "card was swiped Up, position in adapter: " + position);
+            }
+
+            @Override
             public void cardsDepleted() {
                 Log.i("MainActivity", "no more cards");
+                getData();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -98,16 +100,7 @@ public class SwipeDeckActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testData.add("a sample string.");
-//                ArrayList<String> newData = new ArrayList<>();
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//                newData.add("some new data");
-//
-//                SwipeDeckAdapter adapter = new SwipeDeckAdapter(newData, context);
-//                cardStack.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
+                cardStack.swipeTopCardUp(180);
             }
         });
     }
@@ -132,6 +125,14 @@ public class SwipeDeckActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getData() {
+        testData.add("0");
+        testData.add("1");
+        testData.add("2");
+        testData.add("3");
+        testData.add("4");
     }
 
     public class SwipeDeckAdapter extends BaseAdapter {
